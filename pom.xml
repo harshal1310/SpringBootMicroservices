@@ -26,6 +26,7 @@
 		<module>untitled</module>
 		<module>order</module>
 		<module>inventory</module>
+		<module>ServiceRegistry</module>
 	</modules>
     <scm>
 		<connection/>
