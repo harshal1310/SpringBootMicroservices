@@ -11,9 +11,10 @@ public class Order {
     private Long id;
 
     private Long productId;
+
     private int quantity;
     private String status; // PENDING, CONFIRMED, CANCELLED
-private String itemName;
+    private String itemName;
     public Long getId() {
         return id;
     }

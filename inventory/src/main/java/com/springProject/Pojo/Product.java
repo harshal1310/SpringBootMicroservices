@@ -1,6 +1,8 @@
 package com.springProject.Pojo;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -9,9 +11,26 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String itemName;
+    @NotNull
     private double price;
+    @NotNull
     private int quantity;
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    String msg;
 
     public Long getId() {
         return id;
@@ -24,11 +43,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, double price, int stock) {
+    public Product(Long id, String name, double price, int stock, String msg) {
         this.id = id;
         this.itemName = name;
         this.price = price;
         this.quantity = stock;
+        this.msg = msg;
     }
 
     public String getItemName() {

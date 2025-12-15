@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByItemName(String itemName);
+    Optional<Product> findByItemNameIgnoreCase(String itemName);
 }

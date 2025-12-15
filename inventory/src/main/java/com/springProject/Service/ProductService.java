@@ -15,10 +15,10 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public String updateStock(String itemName, int quantity) {
-        Optional<Product> item = productRepository.findByItemName(itemName);
+        Optional<Product> item = productRepository.findByItemNameIgnoreCase(itemName);
         if (item.isPresent()) {
             Product inventoryItem = item.get();
-            inventoryItem.setQuantity(inventoryItem.getQuantity() + quantity);
+            inventoryItem.setQuantity(inventoryItem.getQuantity() - quantity);
             productRepository.save(inventoryItem);
             return "Stock updated";
         } else {
@@ -28,7 +28,7 @@ public class ProductService {
     public String addItem(String itemName, int quantity) {
         System.out.println("name is" + itemName);
         System.out.println("quantity is" + quantity);
-        if (productRepository.findByItemName(itemName).isPresent()) {  // Fix: Use Optional check
+        if (productRepository.findByItemNameIgnoreCase(itemName).isPresent()) {  // Fix: Use Optional check
             return "Item already exists!";
         }
 
@@ -43,7 +43,7 @@ public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
     public boolean checkStock(String itemName, int quantity) {
-        Optional<Product> item = productRepository.findByItemName(itemName);
+        Optional<Product> item = productRepository.findByItemNameIgnoreCase(itemName);
         if (item.isPresent()) {
             return item.get().getQuantity() >= quantity;
         }
