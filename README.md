@@ -1,5 +1,6 @@
 # SpringBootMicroservices
 
+
 This repository is a small Spring Boot microservices demo composed of multiple Maven modules:
 - Service Registry (Eureka): service discovery implemented by [`com.springProject.EurekaServer`](ServiceRegistry/src/main/java/com/springProject/EurekaServer.java)
 - Inventory service: manages products and stock — see [`com.springProject.Inventory`](inventory/src/main/java/com/springProject/Inventory.java) and [`com.springProject.Controller.ProductController`](inventory/src/main/java/com/springProject/Controller/ProductController.java)
@@ -7,6 +8,12 @@ This repository is a small Spring Boot microservices demo composed of multiple M
 - Example demo application: [`src/main/java/com/springProject/demo/DemoApplication.java`](src/main/java/com/springProject/demo/DemoApplication.java)
 
 Quick start
+
+chmod +x start.sh
+./start.sh  run on colima with kafka integration
+
+or
+
 1. Start the Service Registry:
    mvn -pl ServiceRegistry spring-boot:run
 2. Start the Inventory service:
