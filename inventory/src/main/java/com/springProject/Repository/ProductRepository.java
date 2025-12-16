@@ -1,10 +1,9 @@
 package com.springProject.Repository;
 
-import com.springProject.Pojo.Product;
+import com.springProject.Pojo.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByItemNameIgnoreCase(String itemName);
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+    Optional<ProductEntity> findByItemNameIgnoreCase(String itemName);
 }

@@ -1,8 +1,7 @@
 package com.springProject.Service;
 
-import com.springProject.Pojo.Product;
+import com.springProject.Pojo.ProductEntity;
 import com.springProject.Repository.ProductRepository;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +14,9 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public String updateStock(String itemName, int quantity) {
-        Optional<Product> item = productRepository.findByItemNameIgnoreCase(itemName);
+        Optional<ProductEntity> item = productRepository.findByItemNameIgnoreCase(itemName);
         if (item.isPresent()) {
-            Product inventoryItem = item.get();
+            ProductEntity inventoryItem = item.get();
             inventoryItem.setQuantity(inventoryItem.getQuantity() - quantity);
             productRepository.save(inventoryItem);
             return "Stock updated";
@@ -32,18 +31,18 @@ public class ProductService {
             return "Item already exists!";
         }
 
-        Product product = new Product();  // Fix: Use correct class name
+        ProductEntity product = new ProductEntity();  // Fix: Use correct class name
         product.setName(itemName);  // Fix: Use correct setter
         product.setQuantity(quantity);
         product.setPrice(1.00);
         productRepository.save(product);
         return "Item added successfully!";
     }
-public List<Product> getAllProducts() {
+public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
     public boolean checkStock(String itemName, int quantity) {
-        Optional<Product> item = productRepository.findByItemNameIgnoreCase(itemName);
+        Optional<ProductEntity> item = productRepository.findByItemNameIgnoreCase(itemName);
         if (item.isPresent()) {
             return item.get().getQuantity() >= quantity;
         }

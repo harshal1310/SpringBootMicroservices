@@ -1,12 +1,11 @@
 package com.springProject.Pojo;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,10 +39,10 @@ public class Product {
         this.id = id;
     }
 
-    public Product() {
+    public ProductEntity() {
     }
 
-    public Product(Long id, String name, double price, int stock, String msg) {
+    public ProductEntity(Long id, String name, double price, int stock, String msg) {
         this.id = id;
         this.itemName = name;
         this.price = price;

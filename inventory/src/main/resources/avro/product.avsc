@@ -1,0 +1,15 @@
+{
+  "namespace": "com.springProject.dto",
+  "type": "record",
+  "name": "Product",
+  "fields": [
+    { "name": "itemName", "type": "string" },
+    { "name": "price", "type": "double" },
+    { "name": "quantity", "type": "int" },
+    {
+      "name": "msg",
+      "type": ["null", "string"],
+      "default": null
+    }
+  ]
+}

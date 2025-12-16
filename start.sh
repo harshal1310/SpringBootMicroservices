@@ -20,7 +20,7 @@ KAFKA_PORT=9092
 KAFDROP_PORT=9292
 
 DOCKER_NETWORK="kafka-net"
-MAVEN_CMD="mvn spring-boot:run -Dspring-boot.run.profiles=dev"
+MAVEN_CMD="(mvn clean compile && mvn spring-boot:run -Dspring-boot.run.profiles=dev)"
 
 # -----------------------------
 # Start Colima
@@ -126,11 +126,46 @@ docker run -d --name "$KAFDROP_CONTAINER" \
 
 echo "Kafdrop available at http://localhost:$KAFDROP_PORT"
 
+
+echo "Preparing Schema Registry..."
+
+# Stop & remove existing container if present
+if docker ps -aq -f name="^${SCHEMA_REGISTRY_CONTAINER}$" | grep -q .; then
+    echo "Stopping existing Schema Registry..."
+    docker rm -f "$SCHEMA_REGISTRY_CONTAINER"
+fi
+
+# -----------------------------
+# Start Schema Registry
+# -----------------------------
+SCHEMA_REGISTRY_CONTAINER="schema-registry-colima"
+SCHEMA_REGISTRY_PORT=8082
+
+echo "Starting Schema Registry..."
+docker run -d --name "$SCHEMA_REGISTRY_CONTAINER" \
+  --network "$DOCKER_NETWORK" \
+  -p "$SCHEMA_REGISTRY_PORT:8082" \
+  -e SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=PLAINTEXT://kafka-colima:29092 \
+  -e SCHEMA_REGISTRY_HOST_NAME=127.0.0.1 \
+  -e SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8082 \
+  confluentinc/cp-schema-registry:7.5.0
+
+
+
+# Wait for Schema Registry
+echo "Waiting for Schema Registry..."
+until curl -sf http://127.0.0.1:$SCHEMA_REGISTRY_PORT/subjects >/dev/null 2>&1; do
+    printf "."
+    sleep 2
+done
+echo "Schema Registry is ready!"
+
+
 # -----------------------------
 # Start Eureka Server
 # -----------------------------
 echo "Starting Eureka server: $EUREKA_SERVICE..."
-(cd "$EUREKA_SERVICE" && $MAVEN_CMD &)
+(cd "$EUREKA_SERVICE" && mvn clean compile && mvn spring-boot:run -Dspring-boot.run.profiles=dev &)
 
 echo "Waiting for Eureka..."
 until curl -sf http://localhost:8761 >/dev/null; do
@@ -144,7 +179,13 @@ echo "Eureka is ready!"
 # -----------------------------
 for SERVICE in "${SERVICES[@]}"; do
     echo "Starting service: $SERVICE..."
-    (cd "$SERVICE" && $MAVEN_CMD &)
+    (cd "$SERVICE" && mvn clean compile && mvn spring-boot:run -Dspring-boot.run.profiles=dev &)
+
 done
 
+
+
+
 echo "✅ All services started successfully!"
+
+
